@@ -108,8 +108,6 @@ const InfoCard: React.FC<InfoCardProps> = ({
               onClick={() => {
                 if (context) {
                   context.changeEditDialogState(true);
-                  console.log("DFAFDASFADSFDSAFATEWR#R", _id, title);
-
                   context.changeSelectedTask({
                     _id,
                     title,

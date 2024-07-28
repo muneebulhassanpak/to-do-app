@@ -26,8 +26,6 @@ export const editTodoBody = async (data: {
   title: string;
   description: string;
 }): Promise<Todo> => {
-  console.log("JJJJJJJ");
-
   const response = await api.patch(`/edit-todo-body/${data._id}`, {
     title: data.title,
     description: data.description,
@@ -44,8 +42,6 @@ export const editTodoStatus = async (data: {
   _id: string;
   status: "in-progress" | "completed";
 }): Promise<Todo> => {
-  console.log("FDAFASFADSFASDF", data._id);
-
   const response = await api.put(`/edit-todo-status/${data._id}`, {
     status: data.status,
   });
@@ -70,7 +66,6 @@ export const useCreateTodo = () => {
 
 export const useEditTodoBody = () => {
   const queryClient = useQueryClient();
-  console.log("NNNJJJ");
 
   return useMutation<
     Todo,

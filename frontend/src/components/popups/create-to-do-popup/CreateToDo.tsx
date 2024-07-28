@@ -42,7 +42,6 @@ const CreateToDo: React.FC<CreateToDoProps> = ({ edit = false, task }) => {
   const handleClose = () => {
     if (edit) {
       context?.changeEditDialogState(false);
-      console.log("I am wokrgin");
     } else {
       context?.changeCreateDialogState(false);
     }
@@ -51,14 +50,10 @@ const CreateToDo: React.FC<CreateToDoProps> = ({ edit = false, task }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (edit && task) {
-      console.log("I araeraerae", task._id);
       editTodoMutation.mutate({ _id: task._id, title, description });
     } else {
-      console.log("I REAN", title);
-
       createTodoMutation.mutate({ title, description });
     }
-    console.log("SDSDSDS");
 
     handleClose();
   };

@@ -89,8 +89,6 @@ export const ToDoProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const changeSelectedTask = (data: ToDoItemInterface): void => {
-    console.log("DAFAFDAFDASFAD", data);
-
     setSelectedTask(data);
   };
 
