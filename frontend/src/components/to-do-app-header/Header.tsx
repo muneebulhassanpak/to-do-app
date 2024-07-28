@@ -1,5 +1,4 @@
 import CreateNewButton from "../utils/buttons/Buttons";
-import SearchInput from "./SearchToDo";
 
 const Header = () => {
   return (
@@ -10,7 +9,6 @@ const Header = () => {
         </h2>
       </div>
       <div className="right flex flex-col-reverse sm:flex-row gap-4">
-        <SearchInput />
         <CreateNewButton />
       </div>
     </header>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
@@ -26,11 +27,27 @@ const WhiteTextField = styled(TextField)({
   },
 });
 
-const SearchInput = () => {
+interface SearchInputProps {
+  onSearch: (query: string) => void;
+}
+
+const SearchInput = ({ onSearch }: SearchInputProps) => {
+  const [query, setQuery] = useState("");
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onSearch(query);
+    }
+  };
+
   return (
     <WhiteTextField
       variant="outlined"
-      placeholder="Search..."
+      placeholder="Search ToDos Via Title..."
+      fullWidth
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      onKeyDown={handleKeyDown}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -39,7 +56,7 @@ const SearchInput = () => {
         ),
       }}
       InputLabelProps={{
-        style: { color: "white" }, // Placeholder color
+        style: { color: "white" },
       }}
     />
   );

@@ -48,8 +48,10 @@ export const editTodoStatus = async (data: {
   return response.data;
 };
 
-export const getTodos = async (): Promise<Todo[]> => {
-  const response = await api.get("/get-todos");
+export const getTodos = async (searchTerm: string): Promise<Todo[]> => {
+  const response = await api.get(
+    `/get-todos${searchTerm ? `?search=${searchTerm}` : ""}`
+  );
   return response.data;
 };
 
@@ -103,9 +105,9 @@ export const useEditTodoStatus = () => {
   });
 };
 
-export const useGetTodos = () => {
+export const useGetTodos = (searchTerm: string) => {
   return useQuery<Todo[], Error>({
-    queryKey: ["todos"],
-    queryFn: getTodos,
+    queryKey: ["todos", searchTerm],
+    queryFn: () => getTodos(searchTerm),
   });
 };

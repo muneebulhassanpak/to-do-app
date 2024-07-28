@@ -104,11 +104,14 @@ const deleteTodoController = async (req, res, next) => {
 
 const getAllTodosController = async (req, res, next) => {
   try {
-    const todos = await Todo.find({});
-    // Send the response
+    const searchTerm = req.query.search || "";
+
+    const todos = searchTerm
+      ? await Todo.find({ title: { $regex: searchTerm, $options: "i" } })
+      : await Todo.find({});
+
     res.status(200).json(todos);
   } catch (error) {
-    // Pass any errors to the error handling middleware
     return next(error);
   }
 };
