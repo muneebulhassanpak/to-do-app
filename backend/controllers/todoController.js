@@ -1,4 +1,3 @@
-const User = require("../models/User");
 const Todo = require("../models/Todo");
 const CustomError = require("../utils/Error");
 const { validationResult } = require("express-validator");
@@ -17,7 +16,6 @@ const createTodoController = async (req, res, next) => {
     }
 
     const { title, description } = req.body;
-    const userId = req.user.id; // Assuming `verify` middleware adds `user` to the request object
 
     const newTodo = new Todo({
       title,
@@ -26,19 +24,7 @@ const createTodoController = async (req, res, next) => {
 
     const savedTodo = await newTodo.save();
 
-    await User.findByIdAndUpdate(
-      userId,
-      { $push: { todos: savedTodo._id } },
-      { new: true, useFindAndModify: false }
-    );
-    const responsePayload = generateResponseWithPayload(
-      201,
-      true,
-      "Todo created successfully",
-      savedTodo
-    );
-
-    res.status(201).json(responsePayload);
+    res.status(201).json(savedTodo);
   } catch (error) {
     return next(error);
   }
@@ -64,13 +50,8 @@ const editTodoStatusController = async (req, res, next) => {
     if (!updatedTodo) {
       throw new CustomError(404, "Todo not found");
     }
-    const responsePayload = generateResponseWithPayload(
-      200,
-      true,
-      "Todo status updated successfully",
-      updatedTodo
-    );
-    res.status(200).json(responsePayload);
+
+    res.status(200).json(updatedTodo);
   } catch (error) {
     return next(error);
   }
@@ -98,14 +79,7 @@ const editTodoBodyController = async (req, res, next) => {
       throw new CustomError(404, "Todo not found");
     }
 
-    const responsePayload = generateResponseWithPayload(
-      200,
-      true,
-      "Todo  updated successfully",
-      updatedTodo
-    );
-
-    res.status(200).json(responsePayload);
+    res.status(200).json(updatedTodo);
   } catch (error) {
     return next(error);
   }
@@ -115,7 +89,6 @@ const editTodoBodyController = async (req, res, next) => {
 const deleteTodoController = async (req, res, next) => {
   try {
     const { todoid } = req.params;
-    const userId = req.user.id; // Assuming `verify` middleware adds `user` to the request object
 
     const todo = await Todo.findByIdAndDelete(todoid);
 
@@ -123,20 +96,19 @@ const deleteTodoController = async (req, res, next) => {
       throw new CustomError(404, "Todo not found");
     }
 
-    await User.findByIdAndUpdate(
-      userId,
-      { $pull: { todos: todoid } },
-      { new: true, useFindAndModify: false }
-    );
-
-    const payloadresponse = generateResponseWithoutPayload(
-      200,
-      true,
-      "Todo deleted successfully"
-    );
-
-    return res.status(200).json(payloadresponse);
+    return res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
+    return next(error);
+  }
+};
+
+const getAllTodosController = async (req, res, next) => {
+  try {
+    const todos = await Todo.find({});
+    // Send the response
+    res.status(200).json(todos);
+  } catch (error) {
+    // Pass any errors to the error handling middleware
     return next(error);
   }
 };
@@ -146,4 +118,5 @@ module.exports = {
   editTodoStatusController,
   editTodoBodyController,
   deleteTodoController,
+  getAllTodosController,
 };

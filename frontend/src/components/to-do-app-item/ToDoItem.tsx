@@ -11,6 +11,7 @@ import { InfoCardProps } from "../../types/ToDoItemType";
 import DeleteDialog from "../popups/create-to-do-popup/DeleteDialog";
 import { ToDoContext } from "../../contexts/AppContext";
 import CreateToDo from "../popups/create-to-do-popup/CreateToDo";
+import { useEditTodoStatus, useDeleteTodo } from "../Api";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   backgroundColor: "purple",
@@ -57,7 +58,7 @@ const BottomRightIcons = styled("div")(({}) => ({
 }));
 
 const InfoCard: React.FC<InfoCardProps> = ({
-  id,
+  _id,
   title,
   description,
   status,
@@ -73,13 +74,19 @@ const InfoCard: React.FC<InfoCardProps> = ({
 
   const context = useContext(ToDoContext);
 
+  const { mutate: mutateEditStatus } = useEditTodoStatus();
+  const { mutate: mutateDeleteTodo } = useDeleteTodo();
+
   return (
     <>
       <StyledCard>
         <TopRightButton
           variant="contained"
           onClick={() => {
-            updateToDoStatus(id);
+            mutateEditStatus({
+              _id,
+              status: status === "in-progress" ? "completed" : "in-progress",
+            });
           }}
         >
           {status === "in-progress" ? "Mark as Complete" : "Completed"}
@@ -101,7 +108,14 @@ const InfoCard: React.FC<InfoCardProps> = ({
               onClick={() => {
                 if (context) {
                   context.changeEditDialogState(true);
-                  context.setSelectedTask({ id, title, description, status });
+                  console.log("DFAFDASFADSFDSAFATEWR#R", _id, title);
+
+                  context.changeSelectedTask({
+                    _id,
+                    title,
+                    description,
+                    status,
+                  });
                 }
               }}
               className="cursor-pointer"
@@ -128,7 +142,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
             setWarningDialog(false);
           }}
           handleDelete={() => {
-            deleteToDo(id);
+            mutateDeleteTodo(_id);
           }}
         />
       )}

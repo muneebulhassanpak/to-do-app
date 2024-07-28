@@ -6,13 +6,12 @@ const {
   editTodoStatusController,
   editTodoBodyController,
   deleteTodoController,
+  getAllTodosController,
 } = require("../controllers/todoController");
-const verify = require("../utils/normalverification");
 
 // Creating New todo
 router.post(
   "/create-new-todo",
-  verify,
   [
     body("title")
       .notEmpty()
@@ -30,12 +29,11 @@ router.post(
 );
 
 // Editing Status of existing todo
-router.put("/edit-todo-status/:todoid", verify, editTodoStatusController);
+router.put("/edit-todo-status/:todoid", editTodoStatusController);
 
 // Editing Contents of existing todo
 router.patch(
   "/edit-todo-body/:todoid",
-  verify,
   [
     body("title")
       .notEmpty()
@@ -53,6 +51,8 @@ router.patch(
 );
 
 // Deleting an existing todo
-router.delete("/delete-todo/:todoid", verify, deleteTodoController);
+router.delete("/delete-todo/:todoid", deleteTodoController);
+
+router.get("/get-todos", getAllTodosController);
 
 module.exports = router;

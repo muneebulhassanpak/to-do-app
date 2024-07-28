@@ -1,17 +1,17 @@
 export interface ToDoItemInterface {
-  id: number;
+  _id: string;
   title: string;
   description: string;
   status: "in-progress" | "completed";
 }
 
 export interface InfoCardProps {
-  id: number;
+  _id: string;
   title: string;
   description: string;
   status: "in-progress" | "completed";
-  updateToDoStatus: (id: number) => void;
-  deleteToDo: (id: number) => void;
+  updateToDoStatus: (id: string) => void;
+  deleteToDo: (id: string) => void;
 }
 
 export interface DeleteDialogProps {
@@ -29,14 +29,14 @@ export interface CreateDialogProps {
 export interface ToDoContextProps {
   todos: ToDoItemInterface[];
   addTodo: (title: string, description: string) => void;
-  editToDoStatus: (id: number) => void;
+  editToDoStatus: (id: string) => void;
   editTodo: (
-    id: number,
+    id: string,
     title: string,
     description: string,
     status: "in-progress" | "completed"
   ) => void;
-  deleteTodo: (id: number) => void;
+  deleteTodo: (id: string) => void;
   openCreateDialog: boolean;
   openEditDialog: boolean;
   openDeleteDialog: boolean;
@@ -44,5 +44,5 @@ export interface ToDoContextProps {
   changeEditDialogState: (state: boolean) => void;
   changeDeleteDialogState: (state: boolean) => void;
   selectedTask: ToDoItemInterface | undefined;
-  setSelectedTask: (task: ToDoItemInterface | undefined) => void;
+  changeSelectedTask: (task: ToDoItemInterface) => void;
 }

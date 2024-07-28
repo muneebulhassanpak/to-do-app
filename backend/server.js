@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const authRoutes = require("./routes/authRoute");
 const userRoutes = require("./routes/todoRoute");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -14,14 +13,13 @@ connectDatabase();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// app.use(
-//   cors({
-//     origin: ["http://localhost:5173", "https://www.postman.com/"], // Allow requests from frontend origin
-//     credentials: true, // Allow requests with credentials
-//   })
-// );
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://www.postman.com/"],
+    credentials: true,
+  })
+);
 
-app.use("/api/auth", authRoutes);
 app.use("/api/task", userRoutes);
 
 app.use((err, req, res, next) => {

@@ -3,21 +3,21 @@ import { ToDoItemInterface, ToDoContextProps } from "../types/ToDoItemType";
 
 const defaultToDos: ToDoItemInterface[] = [
   {
-    id: 1,
+    _id: "1",
     title: "Sample Title 1",
     description:
       "This is a sample description. It can be very long, exceeding 100 characters, so that we can test the read more and read less functionality properly.",
     status: "in-progress",
   },
   {
-    id: 2,
+    _id: "2",
     title: "Sample Title 2",
     description:
       "This is a sample description. It can be very long, exceeding 100 characters, so that we can test the read more and read less functionality properly.",
     status: "in-progress",
   },
   {
-    id: 3,
+    _id: "3",
     title: "Sample Title 3",
     description:
       "This is a sample description. It can be very long, exceeding 100 characters, so that we can test the read more and read less functionality properly.",
@@ -41,14 +41,14 @@ export const ToDoProvider = ({ children }: { children: ReactNode }) => {
   const addTodo = (title: string, description: string) => {
     setTodos((prevTodos) => [
       ...prevTodos,
-      { id: Date.now(), title, description, status: "in-progress" },
+      { _id: Date.now().toString(), title, description, status: "in-progress" },
     ]);
   };
 
-  const editToDoStatus = (id: number) => {
+  const editToDoStatus = (id: string) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
-        todo.id === id
+        todo._id === id
           ? {
               ...todo,
               status:
@@ -60,20 +60,20 @@ export const ToDoProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const editTodo = (
-    id: number,
+    id: string,
     title: string,
     description: string,
     status: "in-progress" | "completed"
   ) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, title, description, status } : todo
+        todo._id === id ? { ...todo, title, description, status } : todo
       )
     );
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const deleteTodo = (id: string) => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
   };
 
   const changeCreateDialogState = (state: boolean) => {
@@ -86,6 +86,12 @@ export const ToDoProvider = ({ children }: { children: ReactNode }) => {
 
   const changeDeleteDialogState = (state: boolean) => {
     setOpenDeleteDialog(state);
+  };
+
+  const changeSelectedTask = (data: ToDoItemInterface): void => {
+    console.log("DAFAFDAFDASFAD", data);
+
+    setSelectedTask(data);
   };
 
   return (
@@ -103,7 +109,7 @@ export const ToDoProvider = ({ children }: { children: ReactNode }) => {
         changeEditDialogState,
         changeDeleteDialogState,
         selectedTask,
-        setSelectedTask,
+        changeSelectedTask,
       }}
     >
       {children}

@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
 import { ToDoContext } from "../../../contexts/AppContext";
 import { ToDoItemInterface } from "../../../types/ToDoItemType";
+import { useCreateTodo, useEditTodoBody } from "../../Api";
 
 interface CreateToDoProps {
   edit?: boolean;
@@ -35,9 +36,13 @@ const CreateToDo: React.FC<CreateToDoProps> = ({ edit = false, task }) => {
     }
   }, [edit, task]);
 
+  const createTodoMutation = useCreateTodo();
+  const editTodoMutation = useEditTodoBody();
+
   const handleClose = () => {
     if (edit) {
       context?.changeEditDialogState(false);
+      console.log("I am wokrgin");
     } else {
       context?.changeCreateDialogState(false);
     }
@@ -46,10 +51,15 @@ const CreateToDo: React.FC<CreateToDoProps> = ({ edit = false, task }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (edit && task) {
-      context?.editTodo(task.id, title, description, task.status);
+      console.log("I araeraerae", task._id);
+      editTodoMutation.mutate({ _id: task._id, title, description });
     } else {
-      context?.addTodo(title, description);
+      console.log("I REAN", title);
+
+      createTodoMutation.mutate({ title, description });
     }
+    console.log("SDSDSDS");
+
     handleClose();
   };
 
